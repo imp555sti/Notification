@@ -1,0 +1,28 @@
+# Task List
+
+- [ ] Project Initialization <!-- id: 0 -->
+    - [ ] Create `task.md` <!-- id: 1 -->
+    - [ ] Create `implementation_plan.md` <!-- id: 2 -->
+- [ ] Docker Environment Setup <!-- id: 3 -->
+    - [ ] Configure `docker-compose.yml` <!-- id: 4 -->
+    - [ ] Configure `Dockerfile` for PHP/Apache <!-- id: 5 -->
+    - [ ] Configure PostgreSQL setup <!-- id: 6 -->
+- [ ] Database Design <!-- id: 7 -->
+    - [ ] Create schema SQL (Users, Messages) <!-- id: 8 -->
+- [ ] Backend Implementation <!-- id: 9 -->
+    - [ ] Database connection (PDO) <!-- id: 10 -->
+    - [ ] API for sending messages <!-- id: 11 -->
+    - [ ] API for fetching messages <!-- id: 12 -->
+    - [ ] API for checking new messages (Ajax) <!-- id: 13 -->
+    - [ ] API for editing/deleting messages <!-- id: 14 -->
+- [ ] Frontend Implementation <!-- id: 15 -->
+    - [ ] Basic HTML structure <!-- id: 16 -->
+    - [ ] CSS styling <!-- id: 17 -->
+    - [ ] JavaScript for Ajax and UI updates <!-- id: 18 -->
+    - [ ] Notification API integration <!-- id: 19 -->
+- [ ] Verification <!-- id: 20 -->
+    - [ ] Test message sending/receiving <!-- id: 21 -->
+    - [ ] Test notifications <!-- id: 22 -->
+    - [ ] Test specific requirements (Edit/Delete, Unread count) <!-- id: 23 -->
+- [ ] Documentation <!-- id: 24 -->
+    - [ ] `README.md` (Japanese) <!-- id: 25 -->
