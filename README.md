@@ -66,3 +66,17 @@ RHEL10 + Apache 2.4 + PHP 8.3 + PostgreSQL 16 環境で動作する 1:1 テキ�
 ## コーディング規約
 - **PHP**: PSR-12 ベース
 - **言語**: 日本語 (コメント, PHPDoc, コミットメッセージ)
+
+
+## その他
+
+- **Implemantation_plan**: `docs/antigravity/brain/walkthrough.md` に実装計画書があります。
+- **Taks**: `docs/antigravity/brain/tasks.md` にタスクリストがあります。
+- **Walkthrough**: `docs/antigravity/brain/walkthrough.md` に実装の詳細な手順と検証結果があります。
+
+- **Chat**: `docs/chat.md` にチャットの履歴があります。
+
+- **Verification_report**: `docs\antigravity\browser_recordings\` に検証時のスクリーンショットがあります。
+
+
+- **注意事項**: 本アプリケーションは学習目的で作成されており、本番環境での使用には適していません。セキュリティやスケーラビリティの強化が必要です。
