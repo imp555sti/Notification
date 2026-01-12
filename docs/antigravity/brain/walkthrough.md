@@ -22,7 +22,7 @@
 
 ## 動作確認レコーディング
 
-![Chat Verification Flow](file:///C:/Users/tkita/.gemini/antigravity/brain/ffaf8cff-70d2-4f70-b2d3-21bc4ce30b85/chat_verification_1768179327809.webp)
+![Chat Verification Flow](chat_verification_1768179327809.webp)
 
 ## 今後の拡張性
 - 現在はポーリング間隔を 3秒 に設定していますが、負荷に応じて調整可能です。
