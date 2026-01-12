@@ -13,3 +13,8 @@ WebSocketまでのレスポンスは不要で、定期的な状態確認をAjax�
 
 なお、ローカル環境で実行可能なDocker環境を.docker/内に構築しそこでテスト事項可能とする。
 
+## Planning-2
+
+Task.md, implementation_plan.mdはワークスペースのdocsにも常に最新版をアップデートすること
+chat.mdにはこちらでチャットで要求した内容をまとめますので無視して
+
