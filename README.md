@@ -1,4 +1,4 @@
-これは [Antigravity](https://github.com/antigravity-dev/antigravity) による開発を試みた際の実際の出力結果です。
+これは [Google Antigravity](https://antigravity.google/) による開発を試みた際の実際の出力結果です。
 
 
 # 1:1 チャットアプリケーション
@@ -80,4 +80,5 @@ RHEL10 + Apache 2.4 + PHP 8.3 + PostgreSQL 16 環境で動作する 1:1 テキ�
 
 
 - **注意事項**: 本アプリケーションは学習目的で作成されており、本番環境での使用には適していません。セキュリティやスケーラビリティの強化が必要です。
+
 
