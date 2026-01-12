@@ -70,13 +70,14 @@ RHEL10 + Apache 2.4 + PHP 8.3 + PostgreSQL 16 環境で動作する 1:1 テキ�
 
 ## その他
 
-- **Implemantation_plan**: `docs/antigravity/brain/walkthrough.md` に実装計画書があります。
-- **Taks**: `docs/antigravity/brain/tasks.md` にタスクリストがあります。
-- **Walkthrough**: `docs/antigravity/brain/walkthrough.md` に実装の詳細な手順と検証結果があります。
+- **Implemantation_plan**: [docs/antigravity/brain/implementation_plan.md](docs/antigravity/brain/implementation_plan.md) に実装計画書があります。
+- **Task**: [docs/antigravity/brain/task.md](docs/antigravity/brain/task.md) にタスクリストがあります。
+- **Walkthrough**: [docs/antigravity/brain/walkthrough.md](docs/antigravity/brain/walkthrough.md) に実装の詳細な手順と検証結果があります。
 
-- **Chat**: `docs/chat.md` にチャットの履歴があります。
+- **Chat**: [docs/chat.md](docs/chat.md) にチャットの履歴があります。
 
-- **Verification_report**: `docs\antigravity\browser_recordings\` に検証時のスクリーンショットがあります。
+- **Verification_report**: [docs/antigravity/browser_recordings](docs/antigravity/browser_recordings) に検証時のスクリーンショットがあります。
 
 
 - **注意事項**: 本アプリケーションは学習目的で作成されており、本番環境での使用には適していません。セキュリティやスケーラビリティの強化が必要です。
+
