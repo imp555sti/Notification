@@ -1,6 +1,6 @@
 # Antigravity
 
-## Planning-1
+## Planning
 
 RHEL10+Apache2.4+PHP8.3、PostgreSQL16の2階層構造とし、1:1双方向のテキストメッセージ送受信Webアプリを作成したい。
 WebSocketまでのレスポンスは不要で、定期的な状態確認をAjaxで行えればよい
@@ -13,8 +13,21 @@ WebSocketまでのレスポンスは不要で、定期的な状態確認をAjax�
 
 なお、ローカル環境で実行可能なDocker環境を.docker/内に構築しそこでテスト事項可能とする。
 
-## Planning-2
+## Order
 
-Task.md, implementation_plan.mdはワークスペースのdocsにも常に最新版をアップデートすること
+Task.md, implementation_plan.mdはワークスペースのdocs\antigravity\brainにも常に最新版をアップデートすること
 chat.mdにはこちらでチャットで要求した内容をまとめますので無視して
 
+## Implementation Plan Review
+
+- テスト用のユーザは3名とする。
+- デザインはシンプルな業務向け
+- アカウント管理の関係で、作成日、更新日、作成者、論理削除フラグを追加
+
+## After Implementation
+
+- Walkthrough.mdについてもワークスペースのdocs\antigravity\brainにも常に最新版をアップデートすること
+- pgdataはdockerのボリュームの永続的ボリュームに変更して。また、docker-compose.ymlは.docker内に配置したい
+- ワークスペース内のpgdataは削除してよい？
+- ディレクトリ構成の変更内容をImpremantation Planへ反映して
+- README.mdにも反映させて

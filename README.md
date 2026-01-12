@@ -1,3 +1,6 @@
+これは [Antigravity](https://github.com/antigravity-dev/antigravity) による開発を試みた際の実際の出力結果です。
+
+
 # 1:1 チャットアプリケーション
 
 RHEL10 + Apache 2.4 + PHP 8.3 + PostgreSQL 16 環境で動作する 1:1 テキストチャット Web アプリケーションです。
