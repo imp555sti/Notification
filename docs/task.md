@@ -27,3 +27,6 @@
     - [x] Test specific requirements (Edit/Delete, Unread count) <!-- id: 23 -->
 - [x] Documentation <!-- id: 24 -->
     - [x] `README.md` (Japanese) <!-- id: 25 -->
+- [x] Refactor Docker Config <!-- id: 27 -->
+    - [x] Move `docker-compose.yml` to `.docker/` <!-- id: 28 -->
+    - [x] Change `pgdata` to named volume <!-- id: 29 -->

@@ -29,11 +29,16 @@ RHEL10 + Apache 2.4 + PHP 8.3 + PostgreSQL 16 環境で動作する 1:1 テキ�
 - Docker および Docker Compose
 
 ### 構築手順
-1. プロジェクトのルートディレクトリで以下のコマンドを実行します。
+1. プロジェクトのルートディレクトリではなく、`.docker` ディレクトリに移動、または `-f` オプションを使用して起動します。
    ```bash
+   cd .docker
    docker-compose up -d
    ```
-2. 初回起動時にデータベースの初期化が行われます (users テーブル, messages テーブルの作成)。
+   またはルートから:
+   ```bash
+   docker-compose -f .docker/docker-compose.yml up -d
+   ```
+2. 初回起動時にデータベースの初期化が行われます。データは Docker Volume (`pgdata`) に永続化されます。
 
 ### アプリケーションへのアクセス
 ブラウザで以下のURLにアクセスしてください。
@@ -44,7 +49,7 @@ RHEL10 + Apache 2.4 + PHP 8.3 + PostgreSQL 16 環境で動作する 1:1 テキ�
 ## ディレクトリ構成
 ```
 /
-├── .docker/           # Docker 関連ファイル
+├── .docker/           # Docker 関連ファイル (docker-compose.yml, Dockerfile, init.sql)
 ├── src/
 │   ├── public/        # 公開用ディレクトリ
 │   │   ├── api/       # API エンドポイント (Ajax用)
@@ -52,7 +57,6 @@ RHEL10 + Apache 2.4 + PHP 8.3 + PostgreSQL 16 環境で動作する 1:1 テキ�
 │   │   └── index.php  # メイン画面
 │   └── lib/           # バックエンドロジック (DB接続, Service)
 ├── docs/              # ドキュメント (実装計画書, Taskリスト)
-├── docker-compose.yml
 └── README.md
 ```
 

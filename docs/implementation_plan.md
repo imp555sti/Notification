@@ -23,8 +23,9 @@ RHEL10 + Apache 2.4 + PHP 8.3 + PostgreSQL 16 を使用した、1:1 双方向テ
 ├── .docker/
 │   ├── php/
 │   │   └── Dockerfile
-│   └── db/
-│       └── init.sql
+│   ├── db/
+│   │   └── init.sql
+│   └── docker-compose.yml
 ├── src/
 │   ├── public/         # ドキュメントルート
 │   │   ├── index.php   # メイン画面
@@ -41,7 +42,6 @@ RHEL10 + Apache 2.4 + PHP 8.3 + PostgreSQL 16 を使用した、1:1 双方向テ
 │   └── lib/
 │       ├── Database.php
 │       └── MessageService.php
-├── docker-compose.yml
 └── README.md
 ```
 
