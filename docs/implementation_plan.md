@@ -49,6 +49,10 @@ RHEL10 + Apache 2.4 + PHP 8.3 + PostgreSQL 16 を使用した、1:1 双方向テ
 **users テーブル**
 - `id`: SERIAL, PRIMARY KEY
 - `name`: VARCHAR(50)
+- `created_at`: TIMESTAMP
+- `updated_at`: TIMESTAMP
+- `created_by`: VARCHAR(50)
+- `deleted`: BOOLEAN (論理削除フラグ)
 
 **messages テーブル**
 - `id`: SERIAL, PRIMARY KEY
@@ -66,7 +70,8 @@ RHEL10 + Apache 2.4 + PHP 8.3 + PostgreSQL 16 を使用した、1:1 双方向テ
 - **API**: JSON 形式でデータを返すシンプルな API。
 
 ### フロントエンド
-- **画面**: 左側にユーザーリスト（今回は簡易的に相手を選ぶ）、右側にチャットエリア。
+- **画面**: 左側にユーザーリスト（今回はテスト用に3名）、右側にチャットエリア。
+- **デザイン**: シンプルな業務向けデザイン。
 - **Ajax**: `setInterval` で定期的に `api/check.php` を叩き、未読件数や新着メッセージ、ステータス変更（編集/削除）を確認。
 - **通知**: 新規メッセージがある場合に `Notification API` を発火。
 - **編集/削除**: 自分の直近のメッセージに対して操作可能。
