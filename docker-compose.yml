@@ -1,0 +1,28 @@
+services:
+  web:
+    build: ./.docker/php
+    ports:
+      - "8081:80"
+    volumes:
+      - ./src:/var/www/html
+    depends_on:
+      - db
+    environment:
+      - DATABASE_HOST=db
+      - DATABASE_PORT=5432
+      - DATABASE_NAME=chat_db
+      - DATABASE_USER=chat_user
+      - DATABASE_PASSWORD=chat_password
+
+  db:
+    image: postgres:16
+    ports:
+      - "5433:5432"
+    environment:
+      - POSTGRES_DB=chat_db
+      - POSTGRES_USER=chat_user
+      - POSTGRES_PASSWORD=chat_password
+      - TZ=Asia/Tokyo
+    volumes:
+      - ./pgdata:/var/lib/postgresql/data
+      - ./.docker/db/init.sql:/docker-entrypoint-initdb.d/init.sql
