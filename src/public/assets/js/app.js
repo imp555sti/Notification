@@ -1,4 +1,8 @@
 document.addEventListener('DOMContentLoaded', () => {
+    // Notification permission flow constants
+    const CONFIRM_COOLDOWN_KEY = 'notification_confirm_next_show_at';
+    const CONFIRM_COOLDOWN_MS = 24 * 60 * 60 * 1000;
+
     // Current User State
     let currentUser = null;
     let currentChatPartner = null;
@@ -26,8 +30,16 @@ document.addEventListener('DOMContentLoaded', () => {
     const editInput = document.getElementById('edit-input');
     const saveEditBtn = document.getElementById('save-edit-btn');
     const cancelEditBtn = document.getElementById('cancel-edit-btn');
+    const notificationStatus = document.getElementById('notification-status');
+    const notificationEnableBtn = document.getElementById('notification-enable-btn');
+    const notificationHelp = document.getElementById('notification-help');
+    const notificationPermissionModal = document.getElementById('notification-permission-modal');
+    const notificationAcceptBtn = document.getElementById('notification-accept-btn');
+    const notificationLaterBtn = document.getElementById('notification-later-btn');
 
     let editingMessageId = null;
+    let permissionWatchInterval = null;
+    let permissionStatusObject = null;
 
     // --- Event Listeners ---
 
@@ -57,6 +69,10 @@ document.addEventListener('DOMContentLoaded', () => {
     // Edit Modal Actions
     saveEditBtn.addEventListener('click', saveEdit);
     cancelEditBtn.addEventListener('click', closeEditModal);
+
+    if (notificationEnableBtn) {
+        notificationEnableBtn.addEventListener('click', onNotificationEnableClick);
+    }
 
     // メッセージアクション（編集・削除）のイベントデリゲーション
     // インライン onclick を使わずに安全に処理する
@@ -92,12 +108,7 @@ document.addEventListener('DOMContentLoaded', () => {
         chatScreen.classList.remove('hidden');
 
         renderChatUserList();
-        
-        // Notification許可要求: クリック起点（ユーザージェスチャー）で呼ぶ必要がある
-        // iOS Safariはジェスチャーなしの自動呼び出しを拒否するため
-        if ("Notification" in window && Notification.permission === 'default') {
-            Notification.requestPermission();
-        }
+        initNotificationFlow();
 
         // Start Polling
         startPolling();
@@ -107,8 +118,268 @@ document.addEventListener('DOMContentLoaded', () => {
         currentUser = null;
         currentChatPartner = null;
         stopPolling();
+        stopPermissionWatch();
         chatScreen.classList.add('hidden');
         loginScreen.classList.remove('hidden');
+    }
+
+    function initNotificationFlow() {
+        updateNotificationStatus();
+        watchPermissionChange((state) => {
+            updateNotificationStatus(state);
+        });
+
+        if (shouldShowNotificationConfirm()) {
+            openNotificationPermissionModal();
+        }
+    }
+
+    function shouldShowNotificationConfirm() {
+        if (!('Notification' in window)) return false;
+
+        // iOS SafariはPWAとしてホーム画面追加されていないとWeb Pushが使えない
+        if (isIosBrowser() && !isIosStandalonePwa()) {
+            return false;
+        }
+
+        if (Notification.permission !== 'default') {
+            return false;
+        }
+
+        const nextShowAt = localStorage.getItem(CONFIRM_COOLDOWN_KEY);
+        if (nextShowAt && Date.now() < Number(nextShowAt)) {
+            return false;
+        }
+
+        return true;
+    }
+
+    function openNotificationPermissionModal() {
+        if (!notificationPermissionModal || !notificationAcceptBtn || !notificationLaterBtn) {
+            return;
+        }
+
+        notificationPermissionModal.classList.remove('hidden');
+
+        const onAccept = async () => {
+            closeNotificationPermissionModal();
+            await requestNotificationPermissionFromUserGesture();
+        };
+
+        const onLater = () => {
+            const nextShowAt = Date.now() + CONFIRM_COOLDOWN_MS;
+            localStorage.setItem(CONFIRM_COOLDOWN_KEY, String(nextShowAt));
+            closeNotificationPermissionModal();
+        };
+
+        notificationAcceptBtn.addEventListener('click', onAccept, { once: true });
+        notificationLaterBtn.addEventListener('click', onLater, { once: true });
+    }
+
+    function closeNotificationPermissionModal() {
+        if (notificationPermissionModal) {
+            notificationPermissionModal.classList.add('hidden');
+        }
+    }
+
+    async function requestNotificationPermissionFromUserGesture() {
+        if (!('Notification' in window)) {
+            updateNotificationStatus();
+            return;
+        }
+
+        try {
+            const permission = await Notification.requestPermission();
+            updateNotificationStatus(permission);
+        } catch (error) {
+            console.error('Error requesting notification permission:', error);
+            updateNotificationStatus();
+        }
+    }
+
+    function watchPermissionChange(onChange) {
+        stopPermissionWatch();
+
+        if (!('Notification' in window)) {
+            return;
+        }
+
+        const isSafariFamily = isSafariBrowser();
+        const hasPermissionsApi = !!(navigator.permissions && navigator.permissions.query);
+
+        // Safari系はonchangeが不安定なため、Notification.permissionのポーリングで監視
+        if (isSafariFamily || !hasPermissionsApi) {
+            let prevPermission = Notification.permission;
+            permissionWatchInterval = setInterval(() => {
+                const currentPermission = Notification.permission;
+                if (currentPermission !== prevPermission) {
+                    prevPermission = currentPermission;
+                    onChange(currentPermission);
+                }
+            }, 2000);
+            return;
+        }
+
+        navigator.permissions.query({ name: 'notifications' })
+            .then((status) => {
+                permissionStatusObject = status;
+                status.addEventListener('change', () => {
+                    onChange(status.state);
+                });
+            })
+            .catch(() => {
+                // Permissions APIが使えない環境へのフォールバック
+                let prevPermission = Notification.permission;
+                permissionWatchInterval = setInterval(() => {
+                    const currentPermission = Notification.permission;
+                    if (currentPermission !== prevPermission) {
+                        prevPermission = currentPermission;
+                        onChange(currentPermission);
+                    }
+                }, 2000);
+            });
+    }
+
+    function stopPermissionWatch() {
+        if (permissionWatchInterval) {
+            clearInterval(permissionWatchInterval);
+            permissionWatchInterval = null;
+        }
+        if (permissionStatusObject) {
+            permissionStatusObject.onchange = null;
+            permissionStatusObject = null;
+        }
+    }
+
+    function updateNotificationStatus(permission) {
+        if (!notificationStatus) return;
+
+        if (!('Notification' in window)) {
+            notificationStatus.textContent = '通知: このブラウザは未対応';
+            updateNotificationActionUi('unsupported');
+            return;
+        }
+
+        const currentPermission = permission || Notification.permission;
+        if (currentPermission === 'granted') {
+            notificationStatus.textContent = '通知: 有効';
+            updateNotificationActionUi('granted');
+            return;
+        }
+
+        if (currentPermission === 'denied') {
+            notificationStatus.textContent = '通知: ブロック中（ブラウザ設定から解除してください）';
+            updateNotificationActionUi('denied');
+            return;
+        }
+
+        if (isIosBrowser() && !isIosStandalonePwa()) {
+            notificationStatus.textContent = '通知: iOSはホーム画面に追加したPWAでのみ対応';
+            updateNotificationActionUi('ios-non-pwa');
+            return;
+        }
+
+        notificationStatus.textContent = '通知: 未設定';
+        updateNotificationActionUi('default');
+    }
+
+    function updateNotificationActionUi(state) {
+        if (!notificationEnableBtn || !notificationHelp) return;
+
+        if (state === 'granted') {
+            notificationEnableBtn.disabled = true;
+            notificationEnableBtn.textContent = '通知は有効です';
+            notificationHelp.textContent = 'この端末では通知が受信できます。';
+            return;
+        }
+
+        if (state === 'denied') {
+            notificationEnableBtn.disabled = false;
+            notificationEnableBtn.textContent = '設定手順を表示';
+            notificationHelp.textContent = '一度ブロックした通知は、ブラウザ設定で解除が必要です。';
+            return;
+        }
+
+        if (state === 'unsupported') {
+            notificationEnableBtn.disabled = true;
+            notificationEnableBtn.textContent = '通知は未対応です';
+            notificationHelp.textContent = 'このブラウザではWeb通知を利用できません。';
+            return;
+        }
+
+        if (state === 'ios-non-pwa') {
+            notificationEnableBtn.disabled = false;
+            notificationEnableBtn.textContent = 'PWA利用手順を表示';
+            notificationHelp.textContent = 'iOSはホーム画面に追加したPWAでのみ通知に対応します。';
+            return;
+        }
+
+        notificationEnableBtn.disabled = false;
+        notificationEnableBtn.textContent = '通知を有効化';
+        notificationHelp.textContent = '通知を受け取るにはボタンを押して許可してください。';
+    }
+
+    function onNotificationEnableClick() {
+        if (!('Notification' in window)) {
+            alert('このブラウザは通知機能に対応していません。');
+            return;
+        }
+
+        if (isIosBrowser() && !isIosStandalonePwa()) {
+            alert('iOSではSafariの共有メニューから「ホーム画面に追加」したPWAでのみ通知を利用できます。');
+            return;
+        }
+
+        if (Notification.permission === 'granted') {
+            alert('通知は既に有効です。');
+            return;
+        }
+
+        if (Notification.permission === 'denied') {
+            alert(getNotificationSettingGuideMessage());
+            return;
+        }
+
+        openNotificationPermissionModal();
+    }
+
+    function getNotificationSettingGuideMessage() {
+        const ua = navigator.userAgent;
+        const isEdge = /edg/i.test(ua);
+        const isChrome = /chrome|crios/i.test(ua) && !isEdge;
+        const isFirefox = /firefox/i.test(ua);
+        const isSafari = isSafariBrowser();
+
+        if (isEdge) {
+            return 'Edge の設定 > Cookieとサイトのアクセス許可 > 通知 から、このサイトのブロックを解除してください。';
+        }
+
+        if (isChrome) {
+            return 'Chrome のアドレスバー左のサイト情報 > サイトの設定 > 通知 から、このサイトのブロックを解除してください。';
+        }
+
+        if (isFirefox) {
+            return 'Firefox の設定 > プライバシーとセキュリティ > 許可設定 > 通知 から、このサイトのブロックを解除してください。';
+        }
+
+        if (isSafari) {
+            return 'Safari の設定でこのサイトの通知許可を見直してください。iOSはホーム画面追加したPWAでのみ通知に対応します。';
+        }
+
+        return 'ブラウザ設定の「通知」からこのサイトのブロックを解除してください。';
+    }
+
+    function isIosBrowser() {
+        return /iphone|ipad|ipod/i.test(navigator.userAgent);
+    }
+
+    function isIosStandalonePwa() {
+        return window.navigator.standalone === true;
+    }
+
+    function isSafariBrowser() {
+        const ua = navigator.userAgent;
+        return /safari/i.test(ua) && !/chrome|crios|android|edg/i.test(ua);
     }
 
     function renderChatUserList() {
@@ -383,6 +654,9 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function showNotification(senderName, content) {
+        if (!('Notification' in window)) {
+            return;
+        }
         if (Notification.permission === "granted") {
             new Notification(`New message from ${senderName}`, {
                 body: content,

@@ -57,6 +57,40 @@ body {
     padding-bottom: 10px;
 }
 
+.notification-status {
+    font-size: 0.8rem;
+    line-height: 1.5;
+    color: #cfd4da;
+    background-color: #2b3035;
+    border: 1px solid #495057;
+    border-radius: 6px;
+    padding: 8px 10px;
+    margin-bottom: 12px;
+}
+
+.notification-enable-btn {
+    margin-bottom: 8px;
+    padding: 8px 10px;
+    background-color: var(--primary-color);
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.85rem;
+}
+
+.notification-enable-btn:disabled {
+    background-color: #6c757d;
+    cursor: not-allowed;
+}
+
+.notification-help {
+    margin: 0 0 12px;
+    font-size: 0.75rem;
+    line-height: 1.4;
+    color: #adb5bd;
+}
+
 .user-item {
     padding: 10px;
     cursor: pointer;
@@ -244,6 +278,24 @@ body {
     display: flex;
     justify-content: flex-end;
     gap: 10px;
+}
+
+#notification-accept-btn {
+    background-color: var(--primary-color);
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    padding: 8px 14px;
+    cursor: pointer;
+}
+
+#notification-later-btn {
+    background-color: #6c757d;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    padding: 8px 14px;
+    cursor: pointer;
 }
 
 .deleted-msg {

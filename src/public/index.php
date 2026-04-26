@@ -22,6 +22,9 @@
         <div id="chat-screen" class="screen hidden">
             <div class="sidebar">
                 <h2>Users</h2>
+                <div id="notification-status" class="notification-status"></div>
+                <button id="notification-enable-btn" class="notification-enable-btn" type="button">通知を設定</button>
+                <p id="notification-help" class="notification-help"></p>
                 <div id="chat-user-list">
                     <!-- User list will be populated here -->
                 </div>
@@ -50,6 +53,18 @@
             <div class="modal-actions">
                 <button id="save-edit-btn">保存</button>
                 <button id="cancel-edit-btn">キャンセル</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Notification Permission Modal (2-step flow) -->
+    <div id="notification-permission-modal" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="notification-permission-title">
+        <div class="modal-content">
+            <h3 id="notification-permission-title">通知設定</h3>
+            <p>新着メッセージの通知を受け取りますか？</p>
+            <div class="modal-actions">
+                <button id="notification-accept-btn">受け取る</button>
+                <button id="notification-later-btn">後で</button>
             </div>
         </div>
     </div>
