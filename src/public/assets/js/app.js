@@ -29,11 +29,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     let editingMessageId = null;
 
-    // Initialize Notification API
-    if ("Notification" in window) {
-        Notification.requestPermission();
-    }
-
     // --- Event Listeners ---
 
     // Login (User Selection)
@@ -51,7 +46,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Send Message
     sendBtn.addEventListener('click', sendMessage);
-    messageInput.addEventListener('keypress', (e) => {
+    // keypress は非推奨のため keydown を使用
+    messageInput.addEventListener('keydown', (e) => {
         if (e.key === 'Enter' && !e.shiftKey) {
             e.preventDefault();
             sendMessage();
@@ -61,6 +57,30 @@ document.addEventListener('DOMContentLoaded', () => {
     // Edit Modal Actions
     saveEditBtn.addEventListener('click', saveEdit);
     cancelEditBtn.addEventListener('click', closeEditModal);
+
+    // メッセージアクション（編集・削除）のイベントデリゲーション
+    // インライン onclick を使わずに安全に処理する
+    messageArea.addEventListener('click', (e) => {
+        const actionLink = e.target.closest('.action-link[data-action]');
+        if (!actionLink) return;
+        const msgDiv = actionLink.closest('.message');
+        if (!msgDiv) return;
+        const msgId = parseInt(msgDiv.id.replace('msg-', ''), 10);
+        if (actionLink.dataset.action === 'edit') {
+            editMessageHandler(msgId, actionLink.dataset.content);
+        } else if (actionLink.dataset.action === 'delete') {
+            deleteMessageHandler(msgId);
+        }
+    });
+
+    // Page Visibility API: タブ非表示時にポーリングを停止してバッテリー・通信を節約
+    document.addEventListener('visibilitychange', () => {
+        if (document.hidden) {
+            stopPolling();
+        } else if (currentUser) {
+            startPolling();
+        }
+    });
 
     // --- Functions ---
 
@@ -73,6 +93,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
         renderChatUserList();
         
+        // Notification許可要求: クリック起点（ユーザージェスチャー）で呼ぶ必要がある
+        // iOS Safariはジェスチャーなしの自動呼び出しを拒否するため
+        if ("Notification" in window && Notification.permission === 'default') {
+            Notification.requestPermission();
+        }
+
         // Start Polling
         startPolling();
     }
@@ -162,8 +188,8 @@ document.addEventListener('DOMContentLoaded', () => {
         if (isMe && msg.status !== 'deleted') {
             actionsHtml = `
                 <div class="message-actions">
-                    <span class="action-link" onclick="window.editMessage(${msg.id}, '${escapeHtml(msg.content)}')">編集</span>
-                    <span class="action-link" onclick="window.deleteMessage(${msg.id})">削除</span>
+                    <span class="action-link" data-action="edit" data-content="${escapeHtml(msg.content)}">編集</span>
+                    <span class="action-link" data-action="delete">削除</span>
                 </div>
             `;
         }
@@ -200,8 +226,8 @@ document.addEventListener('DOMContentLoaded', () => {
         if (isMe && msg.status !== 'deleted') {
              actionsHtml = `
                 <div class="message-actions">
-                    <span class="action-link" onclick="window.editMessage(${msg.id}, '${escapeHtml(msg.content)}')">編集</span>
-                    <span class="action-link" onclick="window.deleteMessage(${msg.id})">削除</span>
+                    <span class="action-link" data-action="edit" data-content="${escapeHtml(msg.content)}">編集</span>
+                    <span class="action-link" data-action="delete">削除</span>
                 </div>
             `;
         }
@@ -241,7 +267,10 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function stopPolling() {
-        if (pollingInterval) clearInterval(pollingInterval);
+        if (pollingInterval) {
+            clearInterval(pollingInterval);
+            pollingInterval = null;
+        }
     }
 
     async function checkUpdates() {
@@ -383,14 +412,16 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // --- Global Actions (exposed for inline onclick) ---
-    window.editMessage = (id, currentContent) => {
+    // editMessageHandler: イベントデリゲーションから呼び出す内部関数
+    function editMessageHandler(id, currentContent) {
         editingMessageId = id;
         editInput.value = currentContent;
         editModal.classList.remove('hidden');
-    };
+    }
 
-    window.deleteMessage = async (id) => {
-        if(!confirm('本当に削除しますか？')) return;
+    // deleteMessageHandler: イベントデリゲーションから呼び出す内部関数
+    async function deleteMessageHandler(id) {
+        if (!confirm('本当に削除しますか？')) return;
         
         try {
             const response = await fetch('api/action.php', {
