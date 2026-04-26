@@ -2,9 +2,11 @@ services:
   web:
     build: ./.docker/php
     ports:
-      - "8081:80"
+      - "8081:8080"
     volumes:
-      - ./src:/var/www/html
+      - ./src:/opt/app-root/src
+      - ./tests:/opt/app-root/tests
+      - ./phpunit.xml:/opt/app-root/phpunit.xml:ro
     depends_on:
       - db
     environment:
