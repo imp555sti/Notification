@@ -1,0 +1,4 @@
+{
+    "_description": "環境固有の DevKit パス設定（このファイルは .gitignore で管理対象外にすること）",
+    "devkitLocalPath": "G:\\develop\\samples\\team-devkit-main"
+}

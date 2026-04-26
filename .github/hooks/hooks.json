@@ -1,0 +1,40 @@
+{
+	"hooks": {
+		"SessionStart": [
+			{
+				"type": "command",
+				"command": "pwsh -NoLogo -NoProfile -ExecutionPolicy Bypass -File .github/hooks/scripts/session-start-devkit-sync.ps1",
+				"timeout": 30
+			}
+		],
+		"UserPromptSubmit": [],
+		"PreToolUse": [
+			{
+				"type": "command",
+				"command": "pwsh -NoLogo -NoProfile -ExecutionPolicy Bypass -File .github/hooks/scripts/pre-tooluse-quality-gate.ps1",
+				"timeout": 20
+			}
+		],
+		"PostToolUse": [
+			{
+				"type": "command",
+				"command": "pwsh -NoLogo -NoProfile -ExecutionPolicy Bypass -File .github/hooks/scripts/post-tooluse-error-triage.ps1",
+				"timeout": 10
+			}
+		],
+		"PreCompact": [],
+		"SubagentStart": [],
+		"SubagentStop": [],
+		"Stop": []
+	},
+	"_comments": {
+		"SessionStart": "新しいエージェントセッションの最初のプロンプト時に実行されるタイミング。",
+		"UserPromptSubmit": "ユーザーがプロンプトを送信した直後に実行されるタイミング。",
+		"PreToolUse": "ツール呼び出しの直前に実行されるタイミング。",
+		"PostToolUse": "ツール呼び出し成功直後に実行されるタイミング。",
+		"PreCompact": "コンテキスト圧縮の直前に実行されるタイミング。",
+		"SubagentStart": "サブエージェント開始時に実行されるタイミング。",
+		"SubagentStop": "サブエージェント終了時に実行されるタイミング。",
+		"Stop": "エージェントセッション終了時に実行されるタイミング。"
+	}
+}

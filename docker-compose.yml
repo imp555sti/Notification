@@ -1,10 +1,10 @@
 services:
   web:
-    build: ./php
+    build: ./.docker/php
     ports:
       - "8081:80"
     volumes:
-      - ../src:/var/www/html
+      - ./src:/var/www/html
     depends_on:
       - db
     environment:
@@ -25,7 +25,7 @@ services:
       - TZ=Asia/Tokyo
     volumes:
       - pgdata:/var/lib/postgresql/data
-      - ./db/init.sql:/docker-entrypoint-initdb.d/init.sql
+      - ./.docker/db/init.sql:/docker-entrypoint-initdb.d/init.sql
 
 volumes:
   pgdata:
