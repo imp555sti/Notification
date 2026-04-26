@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="/opt/app-root/src/vendor/phpunit/phpunit/phpunit.xsd"
+         bootstrap="/opt/app-root/tests/bootstrap.php"
+         colors="true"
+         verbose="true"
+         testdox="true"
+         stopOnFailure="false"
+         failOnWarning="true"
+         failOnRisky="true">
+    
+    <!-- テストスイート定義 -->
+    <testsuites>
+        <testsuite name="Unit">
+            <directory>/opt/app-root/tests/Unit</directory>
+        </testsuite>
+        <testsuite name="Integration">
+            <directory>/opt/app-root/tests/Integration</directory>
+        </testsuite>
+        <testsuite name="E2E">
+            <directory>/opt/app-root/tests/E2E</directory>
+        </testsuite>
+    </testsuites>
+
+    <!-- カバレッジ設定 -->
+    <coverage processUncoveredFiles="true">
+        <include>
+            <directory suffix=".php">/opt/app-root/src/</directory>
+        </include>
+        <exclude>
+            <directory>/opt/app-root/src/vendor/</directory>
+        </exclude>
+        <report>
+            <html outputDirectory="/opt/app-root/tests/coverage/html"/>
+            <text outputFile="php://stdout" showOnlySummary="true"/>
+            <clover outputFile="/opt/app-root/tests/coverage/clover.xml"/>
+        </report>
+    </coverage>
+
+    <!-- PHP設定 -->
+    <php>
+        <env name="APP_ENV" value="testing"/>
+        <env name="APP_DEBUG" value="true"/>
+        <env name="DATABASE_HOST" value="db"/>
+        <env name="DATABASE_PORT" value="5432"/>
+        <env name="DATABASE_NAME" value="chat_db"/>
+        <env name="DATABASE_USER" value="chat_user"/>
+        <env name="DATABASE_PASSWORD" value="chat_password"/>
+    </php>
+</phpunit>

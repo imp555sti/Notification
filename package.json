@@ -1,0 +1,19 @@
+{
+  "name": "notification-chat-e2e",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Playwright E2E test runner for Notification chat app",
+  "scripts": {
+    "e2e:test": "playwright test",
+    "e2e:test:headed": "playwright test --headed",
+    "e2e:test:ui": "playwright test --ui",
+    "e2e:codegen": "playwright codegen http://localhost:8081/public/index.php",
+    "e2e:install": "playwright install chromium webkit",
+    "e2e:test:chrome": "playwright test --project=desktop-chrome",
+    "e2e:test:dtab": "playwright test --project=dtab-d51f-portrait --project=dtab-d51f-landscape",
+    "e2e:test:ipad": "playwright test --project=ipad-os26-portrait --project=ipad-os26-landscape"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.54.2"
+  }
+}
