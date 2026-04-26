@@ -6,7 +6,7 @@
 以下の要件が満たされていることを確認しました。
 
 1. **環境構築**
-   - [x] Docker (PHP 8.3, Apache 2.4) がポート 8081 で起動中。
+   - [x] Docker (PHP 7.4, Apache 2.4) がポート 8081 で起動中。
    - [x] PostgreSQL 16 がポート 5433 で起動中。
    - [x] `src/lib/Database.php` にて PDO 接続を確認。
 

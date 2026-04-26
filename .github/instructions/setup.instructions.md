@@ -454,7 +454,7 @@ volumes:
 - [ ] `docker-compose build` 成功
 - [ ] `docker-compose up -d` 成功
 - [ ] `composer install` 成功
-- [ ] http://localhost:8080 でアクセス可能
+- [ ] http://localhost:8081 でアクセス可能
 - [ ] PostgreSQL接続確認
 - [ ] PHPUnitテスト実行成功
 - [ ] カバレッジレポート生成成功

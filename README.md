@@ -11,11 +11,11 @@
 
 # 1:1 チャットアプリケーション
 
-RHEL10 + Apache 2.4 + PHP 8.3 + PostgreSQL 16 環境で動作する 1:1 テキストチャット Web アプリケーションです。
+RHEL8 + Apache 2.4 + PHP 7.4 + PostgreSQL 16 環境で動作する 1:1 テキストチャット Web アプリケーションです。
 
 ## 技術スタック
 - **サーバー**: Apache 2.4
-- **言語**: PHP 8.3
+- **言語**: PHP 7.4
 - **データベース**: PostgreSQL 16
 - **フロントエンド**: HTML, CSS, Vanilla JS
 - **環境構築**: Docker, Docker Compose

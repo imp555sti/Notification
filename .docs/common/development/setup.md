@@ -243,7 +243,7 @@ Error response from daemon: Ports are not available: exposing port TCP 0.0.0.0:8
 services:
   apache-php:
     ports:
-      - "8081:80"  # 8080 → 8081 に変更
+      - "8081:8080"  # UBI8/PHP-74 S2Iイメージは8080番ポートで起動
 ```
 
 **解決方法2**: 既存プロセスを停止
