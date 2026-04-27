@@ -1,0 +1,12 @@
+{
+  "phpService": "web",
+  "detectedServices": [
+    "db",
+    "web"
+  ],
+  "source": {
+    "composeFile": "docker-compose.yml",
+    "resolvedBy": "docker compose config --services"
+  },
+  "updatedAt": "2026-04-27"
+}
