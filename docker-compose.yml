@@ -16,6 +16,16 @@ services:
       - DATABASE_USER=chat_user
       - DATABASE_PASSWORD=chat_password
 
+  composer:
+    build: ./.docker/php
+    working_dir: /opt/app-root
+    volumes:
+      - ./:/opt/app-root
+    depends_on:
+      - db
+    entrypoint: ["/bin/sh", "-c"]
+    command: "/opt/app-root/.docker/scripts/composer-install.sh"
+
   db:
     image: postgres:16
     ports:

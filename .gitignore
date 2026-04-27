@@ -1,0 +1,11 @@
+# Ignore the cache, config, and local directories, which may contain sensitive information and are not necessary for version control.
+src/.cache
+src/.config
+src/.local
+src/.bash_history
+
+# Ignore the PHPUnit result cache file, which is generated during testing and should not be committed to version control.
+.phpunit.result.cache
+
+# Ignore the vendor directory, which contains third-party libraries and dependencies.
+src/vendor
