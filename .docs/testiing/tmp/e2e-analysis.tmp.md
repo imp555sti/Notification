@@ -74,6 +74,26 @@
 - コマンド: `npm run e2e:test:chrome -- tests/E2E`
 - 結果: 5 passed
 
+### 追加実装（通知UI）
+- tests/E2E/notification-ui.spec.ts
+	- default（通知未設定導線）
+	- denied（設定解除導線）
+	- unsupported（未対応表示）
+	- iOS非PWA（PWA利用案内）
+- tests/E2E/notification-permission-modal.spec.ts
+	- default時の通知許可モーダル表示
+	- 「後で」選択時のクールダウン保存
+	- 「受け取る」選択時の通知有効化反映
+	- iPad非PWAではモーダルを表示しないこと
+
+### デバイス横展開結果
+- `npm run e2e:test:chrome -- tests/E2E/notification-ui.spec.ts` : 4 passed
+- `npm run e2e:test:dtab -- tests/E2E/notification-ui.spec.ts` : 8 passed
+- `npm run e2e:test:ipad -- tests/E2E/notification-ui.spec.ts` : 8 passed
+- `npm run e2e:test:chrome -- tests/E2E/notification-permission-modal.spec.ts` : 3 passed / 1 skipped
+- `npm run e2e:test:dtab -- tests/E2E/notification-permission-modal.spec.ts` : 6 passed / 2 skipped
+- `npm run e2e:test:ipad -- tests/E2E/notification-permission-modal.spec.ts` : 2 passed / 6 skipped
+
 ### 未対応（次フェーズ）
-- 通知UIの状態差分（default / denied / unsupported / iOS非PWA）
 - Android系Chromium / iPad WebKit への横展開
+- 通知許可後の実通知（new Notification）発火条件の厳密検証
