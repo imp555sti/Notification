@@ -29,6 +29,7 @@
         </include>
         <exclude>
             <directory>/opt/app-root/src/vendor/</directory>
+            <directory>/opt/app-root/src/public/</directory>
         </exclude>
         <report>
             <html outputDirectory="/opt/app-root/tests/coverage/html"/>
