@@ -56,3 +56,24 @@
 - src/public/api/check.php
 - src/public/api/action.php
 - playwright.config.ts
+
+## 実装ログ（2026-04-27）
+
+### 追加したE2Eテスト
+- tests/E2E/chat-shell.spec.ts
+	- 初期表示（ログイン表示 / チャット非表示）
+	- ログイン遷移（自分以外のユーザー表示）
+	- ログアウトでログイン画面へ復帰
+	- 404ページの検知
+- tests/E2E/chat-flow.spec.ts
+	- 相手選択後の送信
+	- 編集モーダル経由の更新（編集済み表示）
+	- confirm後の削除（削除済み表示）
+
+### 実行結果
+- コマンド: `npm run e2e:test:chrome -- tests/E2E`
+- 結果: 5 passed
+
+### 未対応（次フェーズ）
+- 通知UIの状態差分（default / denied / unsupported / iOS非PWA）
+- Android系Chromium / iPad WebKit への横展開

@@ -9,3 +9,6 @@ src/.bash_history
 
 # Ignore the vendor directory, which contains third-party libraries and dependencies.
 src/vendor
+
+# Ignore the node_modules directory, which contains JavaScript dependencies and is not necessary for version control.
+node_modules
