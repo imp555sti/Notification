@@ -2,6 +2,32 @@
 
 PHPUnit 9.x を使用したテスト実装の完全ガイドです。
 
+## テスト系カスタマイズ管理体系（統一ルール）
+
+テスト関連のカスタマイズは、次の責務分担で管理する。
+
+| 種別 | 役割 | 記載する内容 | 記載しない内容 |
+|---|---|---|---|
+| Instructions | 全体方針の正本（常時参照） | 必須ルール、互換制約、品質基準、共通チェックリスト | 個別タスク専用の長い実行手順 |
+| Skills | 再利用可能な実行ワークフロー | 段階的手順、失敗時分岐、テンプレート、反復運用 | プロジェクト全体の強制ポリシー |
+| Prompts | 実行の入口（依頼インターフェース） | 入力テンプレート、最小要件、参照先の明示 | 実装例の大量掲載、詳細手順の重複 |
+
+### テスト系エントリポイント対応
+
+| 目的 | Prompt | Skill |
+|---|---|---|
+| 事前調査（Unit/Integration/E2E観点抽出） | `.github/prompts/prepare-test-context.prompt.md` | `.github/skills/test-prep-pipeline/SKILL.md` |
+| 調査メモ起点の段階実装 | `.github/prompts/implement-tests-from-context.prompt.md` | `.github/skills/test-prep-pipeline/SKILL.md` |
+| 指定クラスのテスト生成・拡張 | `.github/prompts/generate-tests.prompt.md` | `.github/skills/generate-tests-workflow/SKILL.md` |
+
+### 更新ルール
+
+1. ルール変更（必須・禁止・品質基準）は Instructions のみ更新する
+2. 手順変更（段階フロー・反復戦略）は Skills のみ更新する
+3. Prompt は入力・出力の最小定義に限定し、手順本文を重複記載しない
+4. 同一内容を複数ファイルへ複製せず、参照リンクで接続する
+5. 仕様差分が出た場合は、Instructions → Skill → Prompt の順で整合させる
+
 ## 📋 目次
 
 1. [テスト戦略](#テスト戦略)
