@@ -14,4 +14,8 @@ if [ -f composer-setup.php ]; then
   rm composer-setup.php
 fi
 
+if [ -f composer.phar ]; then
+  rm composer.phar
+fi
+
 exit 0

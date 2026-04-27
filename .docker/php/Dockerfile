@@ -2,9 +2,16 @@ FROM registry.access.redhat.com/ubi8/php-74:latest
 
 USER root
 
-# PostgreSQL PHP拡張をインストール
-RUN dnf install -y php-pdo php-pgsql && \
+# PostgreSQL拡張とカバレッジ取得用Xdebugをインストール
+RUN dnf install -y php-pdo php-pgsql php-pecl-xdebug && \
     dnf clean all
+
+# テスト時にコードカバレッジを取得できるようにする
+RUN printf '%s\n' \
+    'zend_extension=xdebug.so' \
+    'xdebug.mode=coverage' \
+    'xdebug.start_with_request=no' \
+    > /etc/php.d/15-xdebug.ini
 
 # タイムゾーン設定
 ENV TZ=Asia/Tokyo

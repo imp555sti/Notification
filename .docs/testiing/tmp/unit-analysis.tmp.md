@@ -53,3 +53,21 @@
 - src/lib/Database.php
 - tests/bootstrap.php
 - composer.json
+
+## 実装ログ（2026-04-27）
+
+### 対象
+- Unit / MessageService 更新系失敗分岐
+
+### 今回の追加（高優先度の補強）
+- testMarkAsReadReturnsFalseWhenExecutionFails
+- testEditMessageReturnsFalseWhenExecutionFails
+- testDeleteMessageReturnsFalseWhenExecutionFails
+
+### 完了理由
+- 既存の成功系テストに対し、更新系3メソッドの execute=false 分岐を追加で固定できた。
+- 1回の更新上限（1領域・最大3ケース）を満たしている。
+
+### 残課題
+- Database::connect の PDOException 時 null 戻り値検証が未実装。
+- MessageService の SQL 文自体の完全一致までは固定していない（低優先度）。
