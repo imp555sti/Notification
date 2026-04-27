@@ -86,6 +86,10 @@
 	- 「受け取る」選択時の通知有効化反映
 	- iPad非PWAではモーダルを表示しないこと
 
+ - tests/E2E/notification-delivery.spec.ts
+	- 表示中チャット相手の更新では `new Notification(...)` が発火しない
+	- 非アクティブ相手（未選択チャット）の更新では `new Notification(...)` が発火する
+
 ### デバイス横展開結果
 - `npm run e2e:test:chrome -- tests/E2E/notification-ui.spec.ts` : 4 passed
 - `npm run e2e:test:dtab -- tests/E2E/notification-ui.spec.ts` : 8 passed
@@ -93,7 +97,8 @@
 - `npm run e2e:test:chrome -- tests/E2E/notification-permission-modal.spec.ts` : 3 passed / 1 skipped
 - `npm run e2e:test:dtab -- tests/E2E/notification-permission-modal.spec.ts` : 6 passed / 2 skipped
 - `npm run e2e:test:ipad -- tests/E2E/notification-permission-modal.spec.ts` : 2 passed / 6 skipped
+- `npm run e2e:test:chrome -- tests/E2E/notification-delivery.spec.ts` : 2 passed
 
 ### 未対応（次フェーズ）
 - Android系Chromium / iPad WebKit への横展開
-- 通知許可後の実通知（new Notification）発火条件の厳密検証
+- `document.hidden=true` 条件での通知発火検証（Playwrightで可視状態制御を含む）
